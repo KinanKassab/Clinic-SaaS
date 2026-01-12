@@ -1,0 +1,891 @@
+================================================================================
+                    CLINIC MANAGEMENT SAAS - FEATURES DOCUMENTATION
+================================================================================
+
+Last Updated: January 12, 2026
+Version: 1.0
+
+
+================================================================================
+WEBSITE OVERVIEW
+================================================================================
+
+Project Name: ClinicSaaS
+Purpose: Comprehensive medical clinic management system designed to streamline
+         daily operations for healthcare providers
+Target Audience: Doctors, medical clinics, healthcare facilities, private practices
+Technology Stack: Next.js 14, React 19, TypeScript, Supabase, Tailwind CSS
+
+
+================================================================================
+AUTHENTICATION & USER MANAGEMENT
+================================================================================
+
+LOGIN SYSTEM
+- Email/Password authentication via Supabase
+- Secure session management with JWT tokens
+- Password visibility toggle for user convenience
+- Loading states with visual feedback
+- Error handling with user-friendly messages
+- Auto-redirect to dashboard after successful login
+- Remember me functionality via secure cookies
+
+REGISTRATION SYSTEM
+- Multi-step registration process
+- Clinic information collection during signup
+  * Clinic name
+  * Doctor full name
+  * Email address
+  * Password (secure hashing)
+- Automatic profile and clinic creation
+- Auto-linking of user to clinic via profiles table
+- Default role assignment (doctor)
+- Post-registration redirect to dashboard
+
+USER SESSION MANAGEMENT
+- Automatic session refresh via middleware
+- Protected route handling
+- Server-side authentication checks
+- Logout functionality with complete session cleanup
+- Session persistence across page refreshes
+
+
+================================================================================
+NAVIGATION FEATURES
+================================================================================
+
+SIDEBAR NAVIGATION (Desktop)
+- Fixed left sidebar with backdrop blur effect
+- Active route highlighting with animated indicator
+- Smooth route transitions using Framer Motion
+- Navigation items:
+  * Overview (Dashboard Home)
+  * Patients
+  * Appointments
+  * Billing & Invoices
+  * Settings
+- Visual icons for each menu item (emoji-based)
+- Logout button at bottom with confirmation
+- Responsive design (hidden on mobile during print)
+
+TOP NAVIGATION BAR
+- Sticky header with backdrop blur
+- Intelligent patient search with live results
+- QR code scanner for instant patient access
+- User profile indicator
+- Global search functionality:
+  * Search by patient name
+  * Search by phone number (supports 09... format)
+  * Smart search with Arabic/English support
+  * Real-time search results dropdown
+  * Click-to-navigate patient selection
+  * "No results" state handling
+- Keyboard shortcut indicator (⌘K)
+
+
+================================================================================
+CORE FUNCTIONALITY
+================================================================================
+
+-----------------------------------
+1. DASHBOARD / OVERVIEW
+-----------------------------------
+
+STATISTICS CARDS
+- Total Patients (with animated counter)
+- Total Revenue (with currency formatting)
+- Pending Bills count
+- All cards feature:
+  * Smooth number count-up animation
+  * Color-coded icons
+  * Professional card design
+
+TODAY'S SCHEDULE PANEL
+- Real-time appointment list for current day
+- Damascus timezone support
+- Time-based greeting (Morning/Afternoon/Evening)
+- Appointment status indicators:
+  * Pending (amber dot)
+  * Confirmed (green dot)
+  * Completed (blue dot)
+  * Cancelled (gray dot)
+- Visual timeline with appointment times
+- Quick navigation to patient profiles
+- Empty state messaging
+- Scrollable list with custom styling
+
+"UP NEXT" CARD
+- Highlights next pending/confirmed appointment
+- Large prominent display with gradient background
+- Shows patient name and appointment time
+- Direct link to patient file
+- Empty state for "no upcoming appointments"
+- Decorative background elements
+
+FINANCIAL CHART
+- Monthly revenue visualization
+- Interactive area chart using Recharts
+- Gradient fill for visual appeal
+- Hover tooltips with exact amounts
+- Responsive chart scaling
+- Grid lines for readability
+- Currency-formatted Y-axis
+
+QUICK ACTION BUTTONS
+- Grid of shortcut tiles:
+  * All Patients
+  * Billing
+  * Schedule
+  * Settings
+- Hover animations and scale effects
+- Icon indicators for each action
+- Direct navigation links
+
+
+-----------------------------------
+2. PATIENT MANAGEMENT
+-----------------------------------
+
+PATIENT LIST VIEW
+- Comprehensive patient table with columns:
+  * Full Name
+  * Phone Number
+  * Gender (color-coded badges)
+  * Date of Birth
+  * Action buttons
+- Row-level actions:
+  * View patient details (eye icon)
+  * Edit patient information (pencil icon)
+  * Delete patient (trash icon with confirmation)
+- Hover effects on table rows
+- Click-to-view patient details
+- Loading skeletons during data fetch
+- Empty state with call-to-action
+- Error handling with retry option
+
+ADD/EDIT PATIENT MODAL
+- Full-screen modal with backdrop blur
+- Form fields:
+  * Full Name (required)
+  * Phone Number (auto-formatted to +963 9XX XXX XXX)
+  * Gender selection (Male/Female dropdown)
+  * Date of Birth (date picker)
+  * Medical History (multi-line text area)
+  * First Visit Date (auto-populated, archive field)
+- Real-time phone number formatting
+- Syrian phone number validation
+- Smooth modal animations (Framer Motion)
+- Cancel and Save buttons
+- Loading states during submission
+- Success/error toast notifications
+- Dual-mode operation (Add new / Edit existing)
+
+PATIENT DETAIL PAGE
+- Two-panel layout:
+  * Left: Patient information card
+  * Right: Tabbed content area
+
+Patient Information Card:
+- Patient full name and ID
+- Gender, Phone, First visit date
+- QR code for patient identification
+- Print-friendly design
+
+Medical Records Tab:
+- Timeline view of all medical visits
+- Each record shows:
+  * Visit date
+  * Diagnosis
+  * Prescription/Treatment
+  * Private notes (if any)
+- Edit and Delete buttons per record
+- Visual timeline with connecting lines
+- Chronological ordering (newest first)
+- Add new visit button
+- Empty state messaging
+- Print optimization (professional layout)
+
+Billing & Invoices Tab:
+- Financial summary cards:
+  * Total Paid (green)
+  * Pending/Debt (yellow)
+- Invoice table with columns:
+  * Date
+  * Service name
+  * Status (paid/pending badge)
+  * Amount
+  * Delete action
+- Total due calculation
+- Add new invoice button
+- Print-ready account statement
+
+Action Buttons:
+- Context-aware buttons (change per tab)
+- New Visit button (medical tab)
+- New Invoice button (billing tab)
+- Print File / Print Statement button
+- Back navigation
+
+QR CODE GENERATION
+- Unique QR code per patient
+- Contains patient ID for scanning
+- High error correction level
+- 100x100px size
+- Positioned in patient card
+
+
+-----------------------------------
+3. APPOINTMENT MANAGEMENT
+-----------------------------------
+
+APPOINTMENT LIST VIEW
+- Card-based grid layout (responsive 1-3 columns)
+- Filter options:
+  * Search by patient name/phone
+  * Filter by status (All, Pending, Confirmed, Completed, Cancelled)
+  * Toggle between "Today" and "All Time"
+- Each appointment card displays:
+  * Patient name and phone
+  * Date and time
+  * Reason for visit
+  * Status badge (color-coded)
+  * Colored left border indicator
+  * Action buttons based on status
+
+Status-Based Actions:
+- Pending appointments:
+  * Confirm button (green)
+  * Cancel button (red)
+- Confirmed appointments:
+  * Complete & Record button (opens medical record modal)
+- Completed/Cancelled appointments:
+  * View Profile link
+
+BOOK APPOINTMENT MODAL
+- Smart patient search dropdown
+- Searchable patient list with:
+  * Name and phone display
+  * "Add New Patient" quick action at bottom
+  * Selected state indicator
+- Appointment fields:
+  * Date picker (min: today)
+  * Time picker
+  * Reason for visit (text area)
+- Auto-save of doctor ID and clinic ID
+- Damascus timezone handling
+- Validation and error messages
+- Integrates with Add Patient Modal
+- Toast notifications on success
+
+APPOINTMENT-TO-RECORD FLOW
+- "Complete & Record" button opens medical record modal
+- Pre-fills appointment context
+- Option to save visit only OR save + create invoice
+- Auto-updates appointment status to "completed"
+- Seamless workflow for visit completion
+
+
+-----------------------------------
+4. MEDICAL RECORDS SYSTEM
+-----------------------------------
+
+ADD/EDIT MEDICAL RECORD MODAL
+- Context-aware modal (works from appointments or patient page)
+- Form fields:
+  * Visit Date (defaults to today)
+  * Diagnosis (required text input)
+  * Prescription/Treatment (multi-line textarea, monospace font)
+  * Private Notes (optional textarea)
+- Dual save options:
+  * "Save Only" - records visit
+  * "Save & Bill" - records visit + opens invoice modal
+- Automatic linking to:
+  * Patient ID
+  * Appointment ID (if from appointment)
+  * Clinic ID
+  * Doctor ID
+- Edit mode pre-populates all fields
+- Loading states and validation
+- Toast notifications
+
+MEDICAL RECORD DISPLAY
+- Timeline visualization on patient detail page
+- Chronological ordering (newest first)
+- Visual connectors between records
+- Hover-reveal edit/delete buttons
+- Professional print styling
+- Border and spacing for readability
+- Date formatting in local timezone
+
+
+-----------------------------------
+5. BILLING & FINANCIAL MANAGEMENT
+-----------------------------------
+
+BILLING DASHBOARD
+- Four summary cards:
+  * Total Income (green theme)
+  * Total Expenses (red theme)
+  * Net Profit (blue theme)
+  * Pending Invoices (amber theme)
+- Animated counters with currency formatting
+- Real-time data aggregation
+
+INTERACTIVE BILLING CHART (BillingChart Component)
+- Dual-view mode:
+  * Annual view (monthly aggregation)
+  * Daily view (selected month breakdown)
+- Zoom functionality:
+  * Click/drag to zoom into specific time periods
+  * Auto-switch to daily view when zoomed beyond 45 days
+  * Scroll back or reset to return to annual view
+- ApexCharts integration with:
+  * Smooth area chart with gradient fill
+  * Interactive tooltips
+  * Toolbar with zoom controls
+  * Responsive design
+- External focus trigger:
+  * Click transaction in sidebar to focus chart on that date
+  * Auto-zoom to ±2 days around clicked date
+- Loading state with pulse animation
+
+RECENT ACTIVITY SIDEBAR
+- Last 6 transactions (invoices + expenses combined)
+- Each item shows:
+  * Type indicator icon (↓ income, ↑ expense, ⏳ pending)
+  * Description/Patient name
+  * Category/Service
+  * Amount (green for income, red for expense)
+  * Date
+- Click transaction to focus on chart
+- Color-coded backgrounds
+- "View Full History" link at bottom
+
+TRANSACTIONS PAGE (Full History)
+- Tabular view of all financial activity
+- Combines invoices and expenses
+- Columns:
+  * Type (badge indicator)
+  * Description/Patient
+  * Category/Service
+  * Date
+  * Amount (signed and colored)
+- Sortable by date
+- Grand total row
+- Back to Billing button
+- Professional styling
+
+CREATE INVOICE MODAL
+- Compact modal design with green theme
+- Fields:
+  * Service/Reason (text input)
+  * Amount (dollar input with $ prefix)
+  * Status toggle (Paid/Pending buttons)
+- Visual status selection with ring highlights
+- Auto-links to patient and clinic
+- Toast notifications
+- Currency validation
+
+ADD EXPENSE MODAL
+- Red-themed modal for expenses
+- Fields:
+  * Description (text input)
+  * Amount (number input)
+  * Category (dropdown with predefined options)
+- Category options:
+  * Rent
+  * Salaries
+  * Equipment
+  * Utilities
+  * Maintenance
+  * Marketing
+  * Other
+- Auto-timestamps to current date
+- Success feedback
+- Triggers data refresh
+
+
+-----------------------------------
+6. SETTINGS & CLINIC CONFIGURATION
+-----------------------------------
+
+CLINIC SETTINGS PAGE
+- Form for clinic details:
+  * Clinic Name
+  * Phone Number (auto-formatted to +963)
+  * Doctor Name
+  * Address/Location (textarea)
+- Real-time phone formatting
+- Save button with loading state
+- Success confirmation
+- Page reload after save
+- Updates used for:
+  * Print headers
+  * Official documents
+  * Patient communication
+
+
+================================================================================
+USER INTERFACE ELEMENTS
+================================================================================
+
+DESIGN SYSTEM
+- Color Palette:
+  * Primary: Blue (#2563eb, #3b82f6, #60a5fa)
+  * Success: Green/Emerald (#10b981, #34d399)
+  * Warning: Amber (#f59e0b, #fbbf24)
+  * Danger: Red (#ef4444, #f87171)
+  * Neutral: Gray scale (#f9fafb to #111827)
+- Typography:
+  * Font Family: Inter (via Next.js font optimization)
+  * Sizes: xs (10px) to 3xl (30px)
+  * Weights: Normal (400), Medium (500), Semibold (600), Bold (700)
+
+INTERACTIVE COMPONENTS
+- Buttons:
+  * Primary (solid blue with shadow)
+  * Secondary (outlined gray)
+  * Danger (red for delete actions)
+  * Ghost (transparent with hover)
+  * Loading states with spinners
+  * Disabled states with reduced opacity
+  * Hover scale animations (Framer Motion)
+
+- Modals:
+  * Backdrop blur effect
+  * Smooth entrance/exit animations
+  * Click-outside-to-close
+  * Escape key handling
+  * Scroll lock when open
+  * Stacked z-index management
+
+- Form Inputs:
+  * Text fields with focus ring
+  * Dropdowns with custom styling
+  * Date pickers (native HTML5)
+  * Time pickers (native HTML5)
+  * Textareas with resize control
+  * Phone input with auto-formatting
+  * Validation states (error borders)
+
+- Badges & Status Indicators:
+  * Pill-shaped badges
+  * Color-coded by status
+  * Uppercase text for emphasis
+  * Used for: appointment status, payment status, gender
+
+- Cards:
+  * White background with subtle shadow
+  * Rounded corners (xl = 12px)
+  * Hover shadow increase
+  * Border on print for clarity
+  * Consistent padding (20-24px)
+
+ANIMATIONS & TRANSITIONS
+- Framer Motion integration throughout
+- Page transitions (fade + slide)
+- Staggered list animations
+- Counter animations (count-up effect)
+- Hover scale effects (1.02-1.1x)
+- Tab switching with layout animation
+- Active indicator sliding effect
+- Loading skeletons with shimmer
+
+TOAST NOTIFICATIONS (Sonner)
+- Top-right positioning
+- Auto-dismiss after 4 seconds
+- Color-coded by type:
+  * Success (green check)
+  * Error (red X)
+  * Info (blue)
+- Swipe-to-dismiss on mobile
+- Stack management (max 3 visible)
+- Rich content support
+
+LOADING STATES
+- Skeleton screens:
+  * Shimmer animation
+  * Content-shaped placeholders
+  * Gray color scheme
+- Spinner animations:
+  * Primary spinner (blue)
+  * Button spinners (white)
+  * Search spinner (inline)
+- Full-page loading on auth
+
+EMPTY STATES
+- Icon + message combination
+- Call-to-action buttons
+- Friendly, encouraging copy
+- Used in:
+  * No patients found
+  * No appointments today
+  * No medical records yet
+  * No transactions
+  * Search with no results
+
+
+================================================================================
+RESPONSIVE DESIGN & ACCESSIBILITY
+================================================================================
+
+MOBILE RESPONSIVENESS
+- Breakpoints:
+  * sm: 640px
+  * md: 768px
+  * lg: 1024px
+  * xl: 1280px
+- Sidebar collapses on mobile (manual toggle via hamburger)
+- Card grids reflow:
+  * 1 column on mobile
+  * 2 columns on tablet
+  * 3 columns on desktop
+- Touch-friendly tap targets (min 44x44px)
+- Swipe gestures for modals
+- Mobile-optimized forms (stacked layout)
+
+PRINT OPTIMIZATION
+- Print-specific styles using Tailwind's print: variant
+- Hide navigation (sidebar + top bar) when printing
+- Full-width content on print
+- Professional header on patient pages:
+  * Clinic name (large, centered)
+  * Clinic address and phone
+  * Border separator
+- Clean, black & white styling
+- Page break avoidance on records
+- Footer with print date and source
+- Optimized for A4 paper size
+
+ACCESSIBILITY FEATURES
+- Semantic HTML structure
+- ARIA labels where needed
+- Keyboard navigation support
+- Focus visible states
+- Color contrast compliance (WCAG AA)
+- Screen reader compatible
+- Alt text for icons (via aria-label)
+- Form labels properly associated
+- Error messages linked to inputs
+
+
+================================================================================
+SEARCH & FILTERING
+================================================================================
+
+GLOBAL PATIENT SEARCH (Top Navbar)
+- Live search with 300ms debounce
+- Searches across:
+  * Patient full name (case-insensitive)
+  * Phone number (supports 09... format)
+- Smart search function (SQL-based):
+  * Handles Arabic numerals
+  * Partial matching
+  * Fuzzy name matching
+- Real-time dropdown results
+- Click to navigate
+- Keyboard navigation ready
+- Shows: name, phone, birth year
+- "No results" state
+
+APPOINTMENT FILTERS
+- Search box:
+  * Patient name search
+  * Phone number search
+  * Live filtering (client-side)
+- Status filter dropdown:
+  * All
+  * Pending
+  * Confirmed
+  * Completed
+  * Cancelled
+- Time filter toggle:
+  * Today only
+  * All time
+- Combines all filters with AND logic
+- Real-time result updates
+- Result count display
+
+PATIENT DROPDOWN SEARCH (Appointment Modal)
+- Searchable dropdown component
+- Filters as you type
+- Shows name + phone for each result
+- Selected state indicator
+- "Add New Patient" quick action
+- Click outside to close
+- Keyboard navigation
+
+
+================================================================================
+QR CODE SYSTEM
+================================================================================
+
+QR CODE GENERATION
+- Library: qrcode.react (QRCodeSVG)
+- Generated for each patient
+- Contains: Patient UUID
+- Size: 100x100 pixels
+- Error correction: High (Level H)
+- Positioned in patient info card
+- Print-friendly (appears on printed files)
+
+QR CODE SCANNER
+- Library: @yudiel/react-qr-scanner
+- Modal-based scanner interface
+- Camera access request
+- Real-time scanning
+- Visual finder box (green square)
+- Auto-close on successful scan
+- Error handling for denied permissions
+- Mobile and desktop compatible
+- Accessible via top navbar icon
+- Instant navigation to patient on scan
+
+
+================================================================================
+DATA PERSISTENCE & DATABASE
+================================================================================
+
+DATABASE: SUPABASE (PostgreSQL)
+- Tables:
+  * users (auth.users) - Authentication
+  * profiles - User profiles with clinic linkage
+  * clinics - Clinic information
+  * patients - Patient records
+  * appointments - Appointment scheduling
+  * medical_records - Visit history
+  * invoices - Payment records
+  * expenses - Clinic expenses
+
+ROW LEVEL SECURITY (RLS)
+- Enabled on all tables
+- Clinic-based data isolation
+- Users can only access their clinic's data
+- Auth-based policies using auth.uid()
+- Read/Write policies separated
+- Tested for data safety
+
+REAL-TIME FEATURES
+- Automatic data refresh after mutations
+- Optimistic UI updates
+- Toast notifications on success/error
+- Loading states during operations
+- Error recovery and retry logic
+
+
+================================================================================
+TECHNICAL FEATURES
+================================================================================
+
+PERFORMANCE OPTIMIZATIONS
+- Next.js 14 App Router
+- React Server Components where applicable
+- Client-side rendering for interactivity
+- Code splitting per route
+- Image optimization (next/image ready)
+- Font optimization (next/font)
+- Lazy loading for modals and charts
+- Dynamic imports for heavy components
+- Debounced search inputs
+- Memoized chart data processing
+
+STATE MANAGEMENT
+- React Hooks (useState, useEffect, useCallback)
+- URL-based state for navigation
+- Form state in local component state
+- Global auth state via Supabase session
+- No additional state management library needed
+
+ROUTING & NAVIGATION
+- App Router (app directory)
+- File-based routing
+- Dynamic routes for patient details ([id])
+- Nested layouts (dashboard layout)
+- Template for page transitions
+- Middleware for auth protection
+- Programmatic navigation (useRouter)
+- Back button support
+
+SECURITY FEATURES
+- Supabase Authentication (JWT-based)
+- Secure password hashing (bcrypt via Supabase)
+- HTTPS enforcement (production)
+- CSRF protection via Supabase
+- SQL injection prevention (parameterized queries)
+- XSS protection (React escaping)
+- Secure cookie handling
+- Environment variable protection
+- Row Level Security on all database operations
+
+ERROR HANDLING
+- Try-catch blocks on all async operations
+- User-friendly error messages
+- Toast notifications for errors
+- Console logging for debugging
+- Fallback UI for loading states
+- Graceful degradation
+- Form validation before submission
+- Network error handling
+
+TIMEZONE HANDLING
+- Damascus timezone (Asia/Damascus) throughout
+- Automatic timezone conversion for display
+- Stored as UTC in database (ISO format)
+- LocaleString formatting for dates
+- Format helpers: formatDate() and formatTime()
+- Consistent date display across app
+
+
+================================================================================
+BROWSER COMPATIBILITY
+================================================================================
+
+SUPPORTED BROWSERS
+- Chrome/Edge (latest 2 versions)
+- Firefox (latest 2 versions)
+- Safari (latest 2 versions)
+- Mobile Safari (iOS 14+)
+- Chrome Mobile (Android 10+)
+
+REQUIRED FEATURES
+- ES2017 JavaScript support
+- CSS Grid and Flexbox
+- Modern date/time inputs
+- Camera API (for QR scanner)
+- LocalStorage and Cookies
+- Fetch API
+- CSS Custom Properties
+
+
+================================================================================
+DEPLOYMENT & ENVIRONMENT
+================================================================================
+
+ENVIRONMENT VARIABLES
+- NEXT_PUBLIC_SUPABASE_URL - Supabase project URL
+- NEXT_PUBLIC_SUPABASE_ANON_KEY - Public API key
+
+BUILD CONFIGURATION
+- Production build: `npm run build`
+- Development server: `npm run dev`
+- Lint checking: `npm run lint`
+- Type checking: TypeScript compilation
+
+DEPLOYMENT READY FOR
+- Vercel (recommended)
+- Netlify
+- Railway
+- Self-hosted Node.js
+- Docker containers
+
+
+================================================================================
+INTEGRATIONS
+================================================================================
+
+THIRD-PARTY LIBRARIES
+- @supabase/supabase-js - Database and auth
+- @supabase/ssr - Server-side rendering support
+- framer-motion - Animations and transitions
+- qrcode.react - QR code generation
+- @yudiel/react-qr-scanner - QR code scanning
+- react-apexcharts - Interactive charts (billing)
+- recharts - Static charts (dashboard)
+- react-hot-toast & sonner - Toast notifications
+- lucide-react - Icon library
+- clsx & tailwind-merge - Utility classes
+
+EXTERNAL SERVICES
+- Supabase (Backend as a Service)
+  * PostgreSQL database
+  * Authentication
+  * Row Level Security
+  * Real-time subscriptions (future-ready)
+  * Storage (future-ready for file uploads)
+
+
+================================================================================
+FUTURE-READY FEATURES
+================================================================================
+
+EXTENSIBILITY POINTS
+- Medical file upload capability (Supabase Storage ready)
+- Multi-doctor clinics (role system in place)
+- SMS/Email notifications (placeholders ready)
+- Appointment reminders
+- Reporting and analytics
+- Insurance claim management
+- Prescription printing
+- Lab result integration
+- Inventory management for medicines
+- Staff management (nurse, receptionist roles exist)
+
+
+================================================================================
+DOCUMENTATION & CODE QUALITY
+================================================================================
+
+CODE ORGANIZATION
+- Component-based architecture
+- Separation of concerns (UI, logic, data)
+- Reusable utility functions
+- Type safety with TypeScript
+- Consistent naming conventions
+- Modular file structure
+
+FILE STRUCTURE
+- /src/app - Pages and layouts (App Router)
+- /src/components - Reusable components
+  * /dashboard - Dashboard-specific components
+  * /patients - Patient management components
+  * /appointments - Appointment components
+  * /billing - Billing components
+  * /ui - Generic UI components
+- /src/utils - Helper functions and utilities
+- /src/types - TypeScript type definitions
+
+CODE COMMENTS
+- JSX comments for clarification
+- Function documentation where complex
+- Type annotations for clarity
+- Migration file documentation (SQL)
+
+NAMING CONVENTIONS
+- PascalCase for components
+- camelCase for functions and variables
+- SCREAMING_SNAKE_CASE for constants
+- kebab-case for file names (where appropriate)
+
+
+================================================================================
+SUPPORT & MAINTENANCE
+================================================================================
+
+DATA BACKUP
+- Supabase automatic backups (depending on plan)
+- Export functionality ready to implement
+- Point-in-time recovery available
+
+MONITORING (Ready to Implement)
+- Error tracking (Sentry integration ready)
+- Performance monitoring
+- User analytics
+- Database query performance
+
+UPDATE STRATEGY
+- Database migrations via Supabase
+- Version control via Git
+- Semantic versioning for releases
+- Changelog maintenance
+
+
+================================================================================
+END OF DOCUMENTATION
+================================================================================
+
+This document catalogs all features as of January 12, 2026.
+For technical support or feature requests, contact the development team.
+
+Project Repository: [To be added]
+Documentation Source: Full codebase analysis
+Generated by: AI Documentation Assistant
